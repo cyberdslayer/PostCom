@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const Handler = async(request:NextRequest) =>{
      if(request.method==="POST"){
-
+      
      }
      else if(request.method==="GET"){
       

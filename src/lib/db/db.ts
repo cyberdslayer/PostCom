@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 
 const dbConnect = async () =>{
-    
     try {
         const dbURI = process.env.NEXT_PUBLIC_DB_URI;
         if (!dbURI) {
