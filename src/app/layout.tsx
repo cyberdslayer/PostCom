@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster"
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       <head />
+//       <body>
+//         <main>{children}</main>
+//       </body>
+//     </html>
+//   )
+// }
+
 
 const instaMedium = localFont({
   src: "./fonts/InstagramSansMedium.woff",
@@ -28,7 +41,9 @@ export default function RootLayout({
       <body
         className={`${instaMedium.variable} ${instaMono.variable} antialiased`}
       >
-        {children}
+        <main>{children}</main>
+        <Toaster />
+
       </body>
     </html>
   );
