@@ -22,7 +22,7 @@ const Handler = async(request:NextRequest) =>{
          if(!update){
             return NextResponse.json({message: " Unable to update post"}, {status: 409})
          }
-         return NextResponse.json({message: "Comment generated successfully"}, {status: 200})
+         return NextResponse.json({message: "Comment generated successfully", data:result}, {status: 200})
       }
       else if(request.method==="GET"){
        
