@@ -89,9 +89,6 @@ And then deploy the `.next` folder according to your hosting provider's instruct
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License 📄
-
-This project is licensed under the MIT License.
 
 ## Acknowledgements 🙏
 
