@@ -30,8 +30,13 @@ const Handler = async(request:NextRequest) =>{
       else{
          return NextResponse.json({message:"Method is not allowed"}, {status:405})
       }
-     }catch(error:any){
-      return NextResponse.json({message: error.message ||  "Internal Server Error"}, {status:500});
+     }catch(error){
+      if (error instanceof Error) {
+         console.log("error in connecting to db", error.message);
+         return NextResponse.json({ message: error.message || "Internal Server Error" }, { status: 500 });
+         }
+         return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+       
      }
 }
 

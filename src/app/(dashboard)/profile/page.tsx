@@ -1,46 +1,29 @@
 "use client"
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase/firebase"; 
-import { User } from "firebase/auth"; // Import Firebase's User type
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
- export interface AuthUser {
+
+export interface AuthUser {
   uid: string;
   email?: string;
   displayName?: string;
 }
-interface Auth {
-  currentUser : AuthUser | null;
-}
-
-const authUser:Auth = {
-  currentUser:null
-}
 
 export default function Component() {
-    // const [user, setUser] = useState<User>();
- 
-   const { user } = useAuth() as { user: AuthUser | null }
-   const fetchUserDetails = async ()=>{
-    console.log(user)
-   }
-    useEffect(() => {
-        // Check for the logged-in user
-        // const loggedInUser = JSON.stringify(auth.currentUser)
-        fetchUserDetails();
-        // const loggedInUser = auth?.currentUser ? JSON.stringify(auth.currentUser) : null;
+  const { user } = useAuth() as { user: AuthUser | null };
 
-        // console.log(`hello ${loggedInUser || "null"} this is auth user`, auth);
-        
-        // console.log("hello" + loggedInUser + "this is auth user" + auth);
-        // if (loggedInUser) {
-        //   setUser(loggedInUser);
-        // }
-      }, []);
+  const fetchUserDetails = async () => {
+    if (user) {
+      console.log(user);
+    }
+  };
 
+  useEffect(() => {
+    fetchUserDetails();
+  }); // Added 'user' as a dependency to prevent warnings
   return (
     <div className="grid max-w-4xl mx-auto gap-8 px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
       <div className="grid gap-4 lg:grid-cols-[200px_1fr] lg:items-start">
@@ -53,7 +36,6 @@ export default function Component() {
           </Avatar>
           <div className="flex items-center gap-2">
             <Button variant="outline">Edit Profile</Button>
-            {/* <Button>Send Message</Button> */}
           </div>
         </div>
         <div className="grid gap-8">
@@ -61,8 +43,8 @@ export default function Component() {
             <h1 className="text-3xl font-bold">{user?.email}</h1>
             <p className="text-gray-500 dark:text-gray-400">Full-Stack Developer</p>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-              Hi there! I'm Shubham, a passionate full-stack developer with a love for building innovative web
-              applications. I enjoy exploring new technologies and constantly expanding my skillset. When I'm not
+              Hi there! I&apos;m Shubham, a passionate full-stack developer with a love for building innovative web
+              applications. I enjoy exploring new technologies and constantly expanding my skillset. When I&apos;m not
               coding, you can find me hiking or reading a good book.
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
@@ -85,7 +67,7 @@ export default function Component() {
                 <div className="grid gap-1">
                   <h3 className="font-semibold">New Project Launch</h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    Shubham launched a new project called "Task Manager" on GitHub.
+                    Shubham launched a new project called &quot;Task Manager&quot; on GitHub.
                   </p>
                   <time className="text-sm text-gray-400">2 days ago</time>
                 </div>
@@ -100,7 +82,7 @@ export default function Component() {
                 <div className="grid gap-1">
                   <h3 className="font-semibold">New Blog Post</h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    Shubham published a new blog post titled "The Power of React\n Hooks".
+                    Shubham published a new blog post titled &quot;The Power of React Hooks&quot;.
                   </p>
                   <time className="text-sm text-gray-400">1 week ago</time>
                 </div>
@@ -115,7 +97,7 @@ export default function Component() {
                 <div className="grid gap-1">
                   <h3 className="font-semibold">New Contribution</h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    Shubham contributed to the popular open-source project "React-Redux".
+                    Shubham contributed to the popular open-source project &quot;React-Redux&quot;.
                   </p>
                   <time className="text-sm text-gray-400">2 weeks ago</time>
                 </div>
@@ -127,9 +109,9 @@ export default function Component() {
     </div>
   )
 }
+  
 
-
-function BadgeIcon(props:any) {
+function BadgeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -148,8 +130,7 @@ function BadgeIcon(props:any) {
   )
 }
 
-
-function CodeIcon(props:any) {
+function CodeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -169,8 +150,7 @@ function CodeIcon(props:any) {
   )
 }
 
-
-function PenIcon(props:any) {
+function PenIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -189,8 +169,7 @@ function PenIcon(props:any) {
   )
 }
 
-
-function StarIcon(props:any) {
+function StarIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -209,8 +188,7 @@ function StarIcon(props:any) {
   )
 }
 
-
-function UserIcon(props:any) {
+function UserIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

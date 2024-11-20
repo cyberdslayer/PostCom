@@ -1,6 +1,5 @@
 import { initializeApp, getApps } from "firebase/app";
 import {getAuth} from "firebase/auth"
-import { exportTraceState } from "next/dist/trace";
 
 // Your web app's Firebase configuration
 export const firebaseConfig = {
@@ -13,7 +12,7 @@ export const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
 
 export const firebaseApp = getApps().length===0 ? initializeApp(firebaseConfig):getApps()[0];
 

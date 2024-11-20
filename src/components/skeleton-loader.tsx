@@ -1,6 +1,6 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 const SkeletonPost = () => (
   <Card className="mb-4 ">
@@ -22,7 +22,7 @@ const SkeletonPost = () => (
       <SkeletonComment />
     </CardFooter>
   </Card>
-)
+);
 
 const SkeletonComment = () => (
   <div className="bg-muted p-2 rounded-md mb-2 w-full">
@@ -33,15 +33,20 @@ const SkeletonComment = () => (
     <Skeleton className="h-3 w-full mb-1" />
     <Skeleton className="h-3 w-3/4" />
   </div>
-)
+);
 
-export default function SkeletonLoader({ numPosts =  3}) {
+export default function SkeletonLoader({ numPosts = 3 }) {
   return (
     <div className="container min-w-full mx-auto p-4">
-      <h1 className="text-2xl font-bold">Postcom</h1>
-      <p className="mb-8">A platform to share your thoughts and ideas</p>
-
-      <Button className="mb-8">Create a New Post</Button>
+      <div className="flex gap-2 justify-between  items-center animate-pulse">
+        <div className="flex gap-2 justify-center items-center">
+          <div className="w-10 h-10 rounded-full bg-gray-300"></div>
+          <div className="w-24 h-6 bg-gray-300 rounded"></div>
+        </div>
+        <div className="w-20 h-8 bg-gray-300 rounded mt-4"></div>
+      </div>
+      <p className="mb-8 w-1/2 h-4 bg-gray-300 rounded animate-pulse"></p>
+      <Button className="w-40 h-10 bg-gray-300 rounded animate-pulse mb-8"></Button>
 
       <div className="h-[calc(100vh-200px)] ">
         {Array.from({ length: numPosts }).map((_, index) => (
@@ -49,5 +54,5 @@ export default function SkeletonLoader({ numPosts =  3}) {
         ))}
       </div>
     </div>
-  )
+  );
 }

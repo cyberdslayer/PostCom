@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -22,20 +21,18 @@ import {
   Italic,
   Underline,
   LinkIcon,
-  X,
   MessageSquare,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
 import SkeletonLoader from "@/components/skeleton-loader";
-import { PostcomSidebar } from "@/components/postcom-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { auth } from "@/lib/firebase/firebase";
-import { User } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { generateFromString } from "generate-avatar";
 import { AuthUser } from "../profile/page";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface Post {
   uid: string;
@@ -54,7 +51,6 @@ const RichTextEditor = ({
   setContent,
   onSubmit,
   fullScreen = false,
-  placeholder = "",
 }: {
   content: string;
   setContent: (content: string) => void;
@@ -69,10 +65,7 @@ const RichTextEditor = ({
       if (editorRef.current) {
         editorRef.current.innerHTML = content;
       }
-    },
-    [
-      // content
-    ]
+    }
   );
 
   const handleInput = () => {
@@ -131,13 +124,13 @@ const RichTextEditor = ({
           <LinkIcon className="h-4 w-4" />
         </Button>
       </div>
-      <div ref={editorRef}
+      <div
+        ref={editorRef}
         contentEditable
         onInput={handleInput}
         className={`border p-2 rounded-md ${
           fullScreen ? "flex-grow overflow-y-auto" : ""
         } ${fullScreen ? "min-h-[100px]" : "min-h-[50px]"}`}
-
         style={{ direction: "ltr", unicodeBidi: "bidi-override" }}
       />
       <Button className="mt-2" onClick={onSubmit}>
@@ -160,10 +153,10 @@ export default function Home() {
     [key: string]: boolean;
   }>({});
 
-  const [isPostSuccess, setIsPostSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // const [user, setUser] = useState<User | null>();
   const { user } = useAuth() as { user: AuthUser | null };
+  const router = useRouter();
 
   // Post API for creating a post
   const createPost = async () => {
@@ -180,10 +173,11 @@ export default function Home() {
         fetchPosts();
       }
       console.log(response);
-    } catch (error: any) {
-      return console.log("error in creating post", error.message);
-    } finally {
-      setIsPostSuccess(true);
+    } catch (error) {
+      if (error instanceof Error) {
+        return console.log("error in creating post", error.message);
+      }
+      return console.log("error in creating post", error);
     }
   };
   // Get API for fetching all the posts
@@ -224,8 +218,11 @@ export default function Home() {
         handleCreateCommentResponse(uid, postId, text, _id);
         setNewComment("");
       }
-    } catch (error: any) {
-      return console.log("Error fetching Comments");
+    } catch (error) {
+      if (error instanceof Error) {
+        return console.log("error in creating post", error.message);
+      }
+      return console.log("error in creating post", error);
     }
   };
 
@@ -270,6 +267,10 @@ export default function Home() {
       createComment(postId);
       setShowCommentBox({ ...showCommentBox, [postId]: false });
     }
+  };
+  const handleSignout = () => {
+    signOut(auth);
+    router.push("/auth");
   };
 
   const toggleCommentBox = (postId: string) => {
@@ -318,7 +319,7 @@ export default function Home() {
             <h1 className="text-2xl font-bold">{user?.email}</h1>
           </div>
           <div>
-            <Button>Logout</Button>
+            <Button onClick={handleSignout}>Logout</Button>
           </div>
         </div>
 
@@ -352,17 +353,12 @@ export default function Home() {
                 <CardHeader>
                   <div className="flex items-center space-x-4">
                     <Avatar>
-                      <img
-                        src={`data:image/svg+xml;utf8,${generateFromString(
-                          post?._id || "default"
-                        )}`}
+                      <AvatarImage
+                      src={`data:image/svg+xml;utf8,${generateFromString(
+                        post?._id || "default"
+                      )}`}
+                      alt={"this user"}
                       />
-                      {/* <AvatarImage src={
-                      // post.user.avatar
-                      ""
-                    } alt={
-                      "this user"
-                    } /> */}
                       <AvatarFallback>{"user"}</AvatarFallback>
                     </Avatar>
                     <div>

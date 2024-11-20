@@ -13,11 +13,14 @@ export const dbConnect = async () =>{
             console.log("already connected")
             return true;
         }
-        const db = await mongoose.connect(dbURI, {
-            dbName:"cloudSEK"
-        })
-    } catch (error:any) {
-        return console.log("error in connecting to db", error.message);
+        // const db = await mongoose.connect(dbURI, {
+        //     dbName:"cloudSEK"
+        // })
+    } catch (error) {
+        if (error instanceof Error) {
+            return console.log("error in connecting to db", error.message || "Internal server Error");
+        }
+        return console.log("error in connecting to db", "Internal server Error");
     }
 //    Add db uri in .env file
 

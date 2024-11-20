@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Search, Bell, Mail, Bookmark, Users, User, Plus, Settings } from 'lucide-react'
-import { cn } from "@/lib/utils"
+import { Home, User, Plus } from 'lucide-react'
+
 import {
   Sidebar,
   SidebarContent,
