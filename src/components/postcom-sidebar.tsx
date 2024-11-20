@@ -55,7 +55,7 @@ export function PostcomSidebar() {
           ))}
         </SidebarMenu>
         <div className="px-4 mt-4">
-          <Button className="w-full" size="lg">
+          <Button className="w-full" size="lg" variant={"outline"}>
             <Plus className="h-4 w-4 mr-2" />
             {isMobile ? "" : "Create Post"}
           </Button>
