@@ -12,9 +12,9 @@ const Handler = async(request:NextRequest) =>{
        const body = await request.json();
        console.log("this is body of comment", body);
  
-       const {id, content} = body;
-       console.log("This is id", id , "This is newComment", content);
-       const result = await new schema_comments({text: content, postId:id}).save();
+       const {id, content, uid} = body;
+       console.log("This is id", id , "This is newComment", content, uid);
+       const result = await new schema_comments({text: content, postId:id, uid}).save();
        if(!result){
           return NextResponse.json({message: " Unable to generate comment"}, {status: 409})
        }

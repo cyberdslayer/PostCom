@@ -78,6 +78,8 @@ export default function AuthPage() {
   const signInHandler = async () => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     if (userCredential.user) {
+      const loggedInUser = auth.currentUser;
+      console.log("current user is" + loggedInUser);
       toast({
         title: "Welcome back!",
         description: "You have successfully logged in.",

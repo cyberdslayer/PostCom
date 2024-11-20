@@ -3,7 +3,7 @@ import {getAuth} from "firebase/auth"
 import { exportTraceState } from "next/dist/trace";
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyA_L50G4U0NJtApRFA1_SsqY99IlmKeKLg",
   authDomain: "carman-7d087.firebaseapp.com",
   projectId: "carman-7d087",

@@ -30,13 +30,21 @@ import {
 import SkeletonLoader from "@/components/skeleton-loader";
 import { PostcomSidebar } from "@/components/postcom-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { auth } from "@/lib/firebase/firebase";
+import { User } from "firebase/auth";
+import { generateFromString } from "generate-avatar";
+import { AuthUser } from "../profile/page";
+import { useAuth } from "@/context/AuthContext";
 
 interface Post {
+  uid: string;
   _id: string;
   content: string;
   comments: Comment[];
 }
 interface Comment {
+  uid: string;
   _id: string;
   text: string;
 }
@@ -72,7 +80,6 @@ const RichTextEditor = ({
       setContent(editorRef.current.innerHTML);
     }
   };
-
   const execCommand = (
     command: string,
     value: string | undefined = undefined
@@ -124,16 +131,14 @@ const RichTextEditor = ({
           <LinkIcon className="h-4 w-4" />
         </Button>
       </div>
-      <div
-        ref={editorRef}
+      <div ref={editorRef}
         contentEditable
         onInput={handleInput}
         className={`border p-2 rounded-md ${
           fullScreen ? "flex-grow overflow-y-auto" : ""
         } ${fullScreen ? "min-h-[100px]" : "min-h-[50px]"}`}
+
         style={{ direction: "ltr", unicodeBidi: "bidi-override" }}
-        // placeholder={placeholder}
-        // aria-label={placeholder}
       />
       <Button className="mt-2" onClick={onSubmit}>
         Submit
@@ -157,6 +162,8 @@ export default function Home() {
 
   const [isPostSuccess, setIsPostSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [user, setUser] = useState<User | null>();
+  const { user } = useAuth() as { user: AuthUser | null };
 
   // Post API for creating a post
   const createPost = async () => {
@@ -166,7 +173,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content: newPost }),
+        body: JSON.stringify({ content: newPost, uid: user?.email }),
       });
 
       if (response.status === 200) {
@@ -195,18 +202,26 @@ export default function Home() {
   //Post API for Creating Comments
   const createComment = async (postId: string) => {
     try {
+      console.log({ id: postId, content: newComment, uid: user?.email });
       const response = await fetch("/api/comments", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: postId, content: newComment }),
+        body: JSON.stringify({
+          id: postId,
+          content: newComment,
+          uid: user?.email,
+        }),
       });
 
       const data = await response.json();
+
+      console.log(data);
+
       if (response.status === 200) {
-        const { _id, text, postId } = data.data;
-        handleCreateCommentResponse(postId, text, _id);
+        const { _id, text, postId, uid } = data.data;
+        handleCreateCommentResponse(uid, postId, text, _id);
         setNewComment("");
       }
     } catch (error: any) {
@@ -215,17 +230,24 @@ export default function Home() {
   };
 
   const handleCreateCommentResponse = (
+    uid: string,
     postid: string,
     comment: string,
     commentID: string
   ) => {
+    // console.log("This is data as a response", uid, postid, comment, commentID)
     const updatedPost = posts.map((post) => {
       if (post._id === postid) {
+        console.log(post);
         const newComment = {
+          uid,
           _id: commentID,
           text: comment,
         };
-        post.comments.push(newComment);
+        const commentList = [newComment, ...post.comments];
+        post.comments = commentList;
+        // post.comments.push(newComment);
+        // console.log(post)
         return post;
       }
       return post;
@@ -257,6 +279,22 @@ export default function Home() {
     setExpandedComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
   };
 
+  function formatDateTime(isoString: string) {
+    const date = new Date(isoString);
+    const formattedTime = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+    const formattedDate = date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+    return `${formattedTime} ${formattedDate}`;
+  }
+
   if (isLoading) {
     return (
       <div className="md:w-[90vh] scrollbar-hide h-screen">
@@ -267,11 +305,24 @@ export default function Home() {
   return (
     <div>
       <div className=" w-full mx-auto p-4">
-        <h1 className="text-2xl font-bold">Postcom</h1>
-        <p className="mb-8">A platform to share your thoughts and ideas</p>
-        <div className="">
-        
+        <div className="flex gap-2 justify-between">
+          <div className="flex  gap-2">
+            <Avatar>
+              <AvatarImage
+                src={`data:image/svg+xml;utf8,${generateFromString(
+                  user?.email || "default"
+                )}`}
+                alt={"this user"}
+              />
+            </Avatar>
+            <h1 className="text-2xl font-bold">{user?.email}</h1>
+          </div>
+          <div>
+            <Button>Logout</Button>
+          </div>
         </div>
+
+        <p className="mb-8">A platform to share your thoughts and ideas</p>
 
         <Dialog open={isPostDialogOpen} onOpenChange={setIsPostDialogOpen}>
           <DialogTrigger asChild>
@@ -289,15 +340,8 @@ export default function Home() {
                   onSubmit={handleCreatePost}
                   fullScreen={true}
                   placeholder="What's on your mind?"
-                  
                 />
               </div>
-              {/* <div className="flex-shrink-0 p-4">
-                <Button onClick={() => setIsPostDialogOpen(false)}>
-                  <X className="h-4 w-4 mr-2" />
-                  Close
-                </Button>
-              </div> */}
             </div>
           </DialogContent>
         </Dialog>
@@ -305,8 +349,34 @@ export default function Home() {
           {posts &&
             posts.map((post) => (
               <Card key={post._id} className="mb-4">
-                <CardContent className="pt-6">
+                <CardHeader>
+                  <div className="flex items-center space-x-4">
+                    <Avatar>
+                      <img
+                        src={`data:image/svg+xml;utf8,${generateFromString(
+                          post?._id || "default"
+                        )}`}
+                      />
+                      {/* <AvatarImage src={
+                      // post.user.avatar
+                      ""
+                    } alt={
+                      "this user"
+                    } /> */}
+                      <AvatarFallback>{"user"}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold">
+                        {post?.uid?.split("@")[0]}
+                      </p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
                   <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                  <p className="text-sm text-gray-700 mt-4">
+                    {formatDateTime("2024-11-18T15:19:35.010+00:00")}
+                  </p>
                 </CardContent>
                 <CardFooter className="flex flex-col items-start">
                   <div className="w-full flex justify-between items-center mb-2">
@@ -319,7 +389,9 @@ export default function Home() {
                       onClick={() => toggleCommentBox(post._id)}
                     >
                       <MessageSquare className="h-4 w-4 mr-2" />
-                      {showCommentBox[post._id] ? "Hide" : "Add Comment"}
+                      <span>
+                        {showCommentBox[post._id] ? "Hide" : "Add Comment"}
+                      </span>
                     </Button>
                   </div>
                   {post.comments
@@ -329,6 +401,20 @@ export default function Home() {
                         key={comment._id}
                         className="bg-muted p-2 rounded-md mb-2 w-full"
                       >
+                        <div className="flex items-center space-x-2 mb-1">
+                          <Avatar className="h-4 w-4">
+                            <AvatarImage
+                              src={`data:image/svg+xml;utf8,${generateFromString(
+                                post?._id || "default"
+                              )}`}
+                              alt={"user"}
+                            />
+                            <AvatarFallback>{"user"}</AvatarFallback>
+                          </Avatar>
+                          <p className="font-semibold text-xs">
+                            {comment?.uid}
+                          </p>
+                        </div>
                         <div
                           dangerouslySetInnerHTML={{ __html: comment.text }}
                         />
@@ -342,12 +428,14 @@ export default function Home() {
                       {expandedComments[post._id] ? (
                         <>
                           <ChevronUp className="h-4 w-4 mr-2" />
-                          Show less
+                          <span>Show less</span>
                         </>
                       ) : (
                         <>
                           <ChevronDown className="h-4 w-4 mr-2" />
-                          Show {post.comments.length - 2} more comments
+                          <span>
+                            Show {post.comments.length - 2} more comments
+                          </span>
                         </>
                       )}
                     </Button>
@@ -357,7 +445,6 @@ export default function Home() {
                       <RichTextEditor
                         content={newComment}
                         setContent={(content) => {
-                          console.log("this is content", content);
                           setNewComment(content);
                         }}
                         onSubmit={() => handleAddComment(post._id)}

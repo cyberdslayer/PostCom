@@ -16,14 +16,14 @@ import {
 import { Button } from "@/components/ui/button"
 
 const menuItems = [
-  { icon: Home, label: "Home", href: "/" },
-  { icon: Search, label: "Explore", href: "/explore" },
-  { icon: Bell, label: "Notifications", href: "/notifications" },
-  { icon: Mail, label: "Messages", href: "/messages" },
-  { icon: Bookmark, label: "Bookmarks", href: "/bookmarks" },
-  { icon: Users, label: "Communities", href: "/communities" },
+  { icon: Home, label: "Home", href: "/create-post" },
+  // { icon: Search, label: "Explore", href: "/explore" },
+  // { icon: Bell, label: "Notifications", href: "/notifications" },
+  // { icon: Mail, label: "Messages", href: "/messages" },
+  // { icon: Bookmark, label: "Bookmarks", href: "/bookmarks" },
+  // { icon: Users, label: "Communities", href: "/communities" },
   { icon: User, label: "Profile", href: "/profile" },
-  { icon: Settings, label: "Settings", href: "/settings" },
+  // { icon: Settings, label: "Settings", href: "/settings" },
 ]
 
 export function PostcomSidebar() {

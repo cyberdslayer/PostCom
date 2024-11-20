@@ -7,13 +7,13 @@ const Handler = async (request: NextRequest) => {
   if (request.method === "POST") {
     try {
         const body = await request.json();
-        const { content } = body;
+        const { content, uid } = body;
         console.log("this is the body", body);
 
         if(!content){
             return NextResponse.json({message:"Content is required"}, {status:400});
         }
-        const newPost = {content};
+        const newPost = {content, uid};
         const result = await new schema_posts(newPost).save();
         return NextResponse.json({message: "Post created", postId: result._id}, {status:200});
     } catch (error:any) {
@@ -22,7 +22,10 @@ const Handler = async (request: NextRequest) => {
 
   } else if (request.method === "GET") {
     try {
-      const posts = await schema_posts.find().populate("comments").lean()
+      const posts = await schema_posts.find().sort({createdAt : -1}).populate({
+        path: "comments",
+        options: {sort:{updatedAt: -1}}
+      }).lean();
       console.log(posts)
       return NextResponse.json({data:posts, message:"fatched successfully"}, {status:200})
     } catch (error:any) {

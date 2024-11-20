@@ -1,12 +1,46 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/u9gWAgM3AKc
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+"use client"
+
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react";
+import { auth } from "@/lib/firebase/firebase"; 
+import { User } from "firebase/auth"; // Import Firebase's User type
+import { useAuth } from "@/context/AuthContext";
+
+ export interface AuthUser {
+  uid: string;
+  email?: string;
+  displayName?: string;
+}
+interface Auth {
+  currentUser : AuthUser | null;
+}
+
+const authUser:Auth = {
+  currentUser:null
+}
 
 export default function Component() {
+    // const [user, setUser] = useState<User>();
+ 
+   const { user } = useAuth() as { user: AuthUser | null }
+   const fetchUserDetails = async ()=>{
+    console.log(user)
+   }
+    useEffect(() => {
+        // Check for the logged-in user
+        // const loggedInUser = JSON.stringify(auth.currentUser)
+        fetchUserDetails();
+        // const loggedInUser = auth?.currentUser ? JSON.stringify(auth.currentUser) : null;
+
+        // console.log(`hello ${loggedInUser || "null"} this is auth user`, auth);
+        
+        // console.log("hello" + loggedInUser + "this is auth user" + auth);
+        // if (loggedInUser) {
+        //   setUser(loggedInUser);
+        // }
+      }, []);
+
   return (
     <div className="grid max-w-4xl mx-auto gap-8 px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
       <div className="grid gap-4 lg:grid-cols-[200px_1fr] lg:items-start">
@@ -24,7 +58,7 @@ export default function Component() {
         </div>
         <div className="grid gap-8">
           <div className="grid gap-2">
-            <h1 className="text-3xl font-bold">Shubham Mishra</h1>
+            <h1 className="text-3xl font-bold">{user?.email}</h1>
             <p className="text-gray-500 dark:text-gray-400">Full-Stack Developer</p>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
               Hi there! I'm Shubham, a passionate full-stack developer with a love for building innovative web
@@ -94,7 +128,8 @@ export default function Component() {
   )
 }
 
-function BadgeIcon(props) {
+
+function BadgeIcon(props:any) {
   return (
     <svg
       {...props}
@@ -114,7 +149,7 @@ function BadgeIcon(props) {
 }
 
 
-function CodeIcon(props) {
+function CodeIcon(props:any) {
   return (
     <svg
       {...props}
@@ -135,7 +170,7 @@ function CodeIcon(props) {
 }
 
 
-function PenIcon(props) {
+function PenIcon(props:any) {
   return (
     <svg
       {...props}
