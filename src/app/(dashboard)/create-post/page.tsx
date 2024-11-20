@@ -318,12 +318,11 @@ export default function Home() {
             <Button onClick={handleSignout}>Logout</Button>
           </div>
         </div>
-
-        <p className="mb-8">A platform to share your thoughts and ideas</p>
+        <p className="mb-4 mt-4">What's on your mind?</p>
 
         <Dialog open={isPostDialogOpen} onOpenChange={setIsPostDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="mb-8 ">Create a New Post</Button>
+            <Button className="mb-8 " >Create a New Post</Button>
           </DialogTrigger>
           <DialogContent className="  p-0">
             <div className="h-full flex flex-col">
