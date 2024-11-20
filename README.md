@@ -1,99 +1,115 @@
 # Postcom 📱💬
 
-Postcom is a modern social media platform that allows users to share posts and engage in discussions through comments. Built with Next.js, Firebase, and MongoDB, it offers a responsive and interactive user experience.
+Postcom is a modern social media platform built with Next.js, React, Node.js, and Express.js. It allows users to sign in, create posts, and comment on posts with rich text formatting options.
 
-## Features 🚀
+## 🌐 Live Demo
 
-- 🔐 User authentication (sign up, login, logout)
+Check out the live application: [Postcom](https://post-com.vercel.app/)
+
+## 🚀 Features
+
+- 🔐 User authentication
 - ✍️ Create and view posts
 - 💬 Comment on posts
-- 🖋️ Rich text editing for posts and comments
+- 🖋️ Rich text editing for posts and comments (bold, italic, underline, links)
 - 📱 Responsive design
-- ⚡ Real-time updates
-- 🗄️ Data persistence with MongoDB
-- 🔥 Firebase integration for authentication and real-time features
+- 🔥 Firebase integration
+- 🗄️ MongoDB for data storage
 
-## Tech Stack 💻
+## 🛠️ Tech Stack
 
 - **Frontend**: Next.js, React
-- **Backend**: Node.js, Express
-- **Authentication**: Firebase Authentication
+- **Backend**: Node.js, Express.js
 - **Database**: MongoDB
-- **Real-time Features**: Firebase Realtime Database
-- **Styling**: Tailwind CSS
+- **Authentication**: Firebase
 - **UI Components**: shadcn/ui
+- **Styling**: Tailwind CSS
 
-## Getting Started 🏁
+## 📁 Project Structure
+
+```
+post-com/
+├── .next/
+├── app/
+│   ├── (dashboard)/
+│   ├── api/
+│   ├── auth/
+│   ├── fonts/
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── ui/
+│   ├── postcom-sidebar.tsx
+│   └── skeleton-loader.tsx
+├── context/
+│   └── AuthContext.js
+├── hooks/
+│   ├── use-mobile.tsx
+│   └── use-toast.ts
+├── lib/
+│   ├── db/
+│   └── firebase/
+├── models/
+├── public/
+├── .env
+├── .eslintrc.json
+├── components.json
+├── next-env.d.ts
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── README.md
+├── tailwind.config.ts
+└── tsconfig.json
+```
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js (v14 or later)
 - npm or yarn
-- Firebase account
 - MongoDB account
+- Firebase account
 
 ### Installation
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/postcom.git
-   cd postcom
+   git clone https://github.com/your-username/post-com.git
+   cd post-com
    ```
 
 2. Install dependencies:
    ```
    npm install
-   # or
-   yarn install
    ```
 
-3. Set up your Firebase project and obtain the configuration details.
-
-4. Set up your MongoDB database and obtain the connection string.
-
-5. Create a `.env.local` file in the root directory and add your configurations:
+3. Create a `.env` file in the root directory and add your MongoDB URI:
    ```
-   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
    MONGODB_URI=your_mongodb_connection_string
    ```
 
-6. Run the development server:
+4. Run the development server:
    ```
    npm run dev
-   # or
-   yarn dev
    ```
 
-7. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Deployment 🚀
+## 🤝 Contributing
 
-The project is set up for easy deployment on Vercel. Connect your GitHub repository to Vercel and it will automatically deploy your main branch.
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/your-username/post-com/issues).
 
-For other platforms, build the project using:
+## 📝 License
 
-```
-npm run build
-# or
-yarn build
-```
+This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
 
-And then deploy the `.next` folder according to your hosting provider's instructions.
-
-## Contributing 🤝
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-
-## Acknowledgements 🙏
+## 🙏 Acknowledgements
 
 - Next.js team for the amazing framework
-- Firebase team for authentication and real-time database solutions
-- MongoDB team for the powerful database system
 - shadcn/ui for beautiful UI components
-- All contributors and supporters of the project
+- Firebase team for authentication solutions
+- MongoDB team for the powerful database system
