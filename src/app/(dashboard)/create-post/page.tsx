@@ -144,17 +144,12 @@ export default function Home() {
   const [newPost, setNewPost] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
   const [newComment, setNewComment] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [isPostDialogOpen, setIsPostDialogOpen] = useState(false);
-  const [showCommentBox, setShowCommentBox] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [expandedComments, setExpandedComments] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const [showCommentBox, setShowCommentBox] = useState<{[key: string]: boolean;}>({});
+  const [expandedComments, setExpandedComments] = useState<{[key: string]: boolean;}>({});
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  // const [user, setUser] = useState<User | null>();
   const { user } = useAuth() as { user: AuthUser | null };
   const router = useRouter();
 
@@ -251,9 +246,6 @@ export default function Home() {
     });
     setPosts(updatedPost);
   };
-  useEffect(() => {
-    fetchPosts();
-  }, []);
   const handleCreatePost = () => {
     if (newPost.trim()) {
       // setPosts([...posts, { _id: Date.now(), content: newPost, comments: [] }])
@@ -295,6 +287,10 @@ export default function Home() {
 
     return `${formattedTime} ${formattedDate}`;
   }
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   if (isLoading) {
     return (
