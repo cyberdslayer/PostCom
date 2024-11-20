@@ -23,6 +23,4 @@ export const dbConnect = async () =>{
         }
         return console.log("error in connecting to db", "Internal server Error");
     }
-//    Add db uri in .env file
-
 }
