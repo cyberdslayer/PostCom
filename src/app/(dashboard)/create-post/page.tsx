@@ -66,7 +66,7 @@ const RichTextEditor = ({
         editorRef.current.innerHTML = content;
       }
     }
-  );
+  ,[]);
 
   const handleInput = () => {
     if (editorRef.current) {
@@ -290,7 +290,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, []); 
 
   if (isLoading) {
     return (
@@ -318,7 +318,7 @@ export default function Home() {
             <Button onClick={handleSignout}>Logout</Button>
           </div>
         </div>
-        <p className="mb-4 mt-4">What's on your mind?</p>
+        <p className="mb-4 mt-4">What&apos;s on your mind?</p>
 
         <Dialog open={isPostDialogOpen} onOpenChange={setIsPostDialogOpen}>
           <DialogTrigger asChild>
