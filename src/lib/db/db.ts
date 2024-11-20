@@ -13,9 +13,10 @@ export const dbConnect = async () =>{
             console.log("already connected")
             return true;
         }
-        // const db = await mongoose.connect(dbURI, {
-        //     dbName:"cloudSEK"
-        // })
+        const db = await mongoose.connect(dbURI, {
+            dbName:"cloudSEK"
+        })
+        return db;
     } catch (error) {
         if (error instanceof Error) {
             return console.log("error in connecting to db", error.message || "Internal server Error");
